@@ -42,4 +42,6 @@ require("lazy").setup({
 	"williamboman/mason.nvim",
 	"williamboman/mason-lspconfig.nvim",
 	"neovim/nvim-lspconfig",
+    -- Chezmoi
+    "alker0/chezmoi.vim"
 })
