@@ -10,5 +10,5 @@ require('mason').setup({
 
 require('mason-lspconfig').setup({
     -- A list of servers to automatically install if they're not already installed
-    ensure_installed = { 'pylsp', 'lua_ls', 'rust_analyzer', 'hyprls', 'html', 'cssls', 'marksman', 'typst_lsp', 'zk', 'jsonls', 'yamlls' },
+    ensure_installed = { 'pylsp', 'lua_ls', 'rust_analyzer', 'hyprls', 'lemminx', 'marksman', 'typst_lsp', 'biome', 'yamlls' },
 })
