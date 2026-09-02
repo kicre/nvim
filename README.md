@@ -22,6 +22,7 @@
 │   └── penumbra.lua         # Penumbra 配色（标准 colors/ 目录，供 :colorscheme 查找）
 ├── lua/
 │   └── config/
+│       ├── minimal.lua      # 无网络 / Neovim < 0.12 自动进入最小模式
 │       ├── options.lua      # 全局选项 + 诊断样式
 │       ├── keymaps.lua      # 全局快捷键（均带 desc）
 │       └── smartcr.lua      # json/yaml 智能回车续行（挂在 blink <CR> 回调）
@@ -40,6 +41,24 @@
 > `:colorscheme penumbra` 即可；`g:colors_name`、background 联动、
 > transparent 重放等原生机制全部保留。配色与 transparent 同文件且在其后，
 > 先后顺序由代码位置保证。
+
+## 兼容性 / 最小配置模式
+
+- 配置在 `init.lua` 中通过 `lua/config/minimal.lua` 判断是否进入完整插件模式：
+  - Neovim < 0.12（无内置 `vim.pack`）会自动关闭所有 `plugin/*.lua` 加载，
+    但原有 `lua/config/options.lua` 和 `keymaps.lua` 继续加载，不需要维护
+    两份 options 配置。
+  - 已联网安装过插件且全部存在于 `nvim-pack-lock.json` 中时，离线也能完整启动。
+  - 首次在新机器启动、插件尚未安装且没有网络时，不会等待/尝试联网克隆，而是
+    自动退回最小配置，避免启动报错或阻塞。
+- 如果要在一台可联网的新机器上安装全部插件，请显式允许启动时安装：
+
+  ```sh
+  NVIM_PACK_INSTALL=1 nvim
+  ```
+
+  安装完成后再正常启动即可使用完整配置。
+- 也可以随时用 `NVIM_MINIMAL=1 nvim` 强制只加载最小配置。
 
 ## 常用命令
 

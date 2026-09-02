@@ -12,9 +12,14 @@ opt.mouse = 'a'                        -- 允许鼠标
 opt.undofile = true
 opt.undolevels = 1000
 
--- 折叠（Treesitter expr fold，Neovim 0.12）
-opt.foldmethod = 'expr'
-opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+-- 折叠（Treesitter expr fold 需要较新版本；旧版回退到 indent）
+if vim.treesitter and vim.treesitter.foldexpr then
+  opt.foldmethod = 'expr'
+  opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+else
+  opt.foldmethod = 'indent'
+  opt.foldexpr = 'indent'
+end
 opt.foldlevel = 99
 
 -- 缩进 / Tab ---------------------------------------------------------
@@ -36,11 +41,11 @@ opt.scrolloff = 8        -- 上下滚动时保留 8 行上下文
 opt.sidescrolloff = 8    -- 左右滚动时保留 8 列上下文
 opt.splitbelow = true    -- 新窗口默认在下方
 opt.splitright = true    -- 新纵向窗口默认在右侧
-opt.splitkeep = 'screen' -- 分割/删除窗口时尽量保持视图不滚动
+pcall(function() opt.splitkeep = 'screen' end) -- 分割/删除窗口时尽量保持视图不滚动
 opt.termguicolors = true -- 启用 24-bit 颜色
 opt.showmode = false     -- 状态栏已足够，不再显示 -- INSERT --
 opt.laststatus = 3       -- 全局状态栏
-opt.winborder = 'rounded'
+pcall(function() opt.winborder = 'rounded' end) -- 较新版本才有圆角边框
 opt.showtabline = 1      -- 仅多于 1 个 tab 时显示（无 tabline 插件，=2 会常驻空栏）
 
 -- 响应速度 -------------------------------------------------------------
@@ -49,13 +54,15 @@ opt.timeoutlen = 400     -- 操作符/键位序列等待（which-key 弹窗节�
 opt.inccommand = 'split' -- :%s 替换实时预览（下方分割预览窗）
 
 -- 诊断 -----------------------------------------------------------------
-vim.diagnostic.config({
-  virtual_text = true,     -- 行内显示诊断文本
-  signs = true,            -- sign column 显示图标
-  underline = true,        -- 出错处下划线
-  severity_sort = true,    -- 按严重程度排序
-  float = { source = 'if_many' }, -- 浮窗显示来源（多项时）
-})
+pcall(function()
+  vim.diagnostic.config({
+    virtual_text = true,     -- 行内显示诊断文本
+    signs = true,            -- sign column 显示图标
+    underline = true,        -- 出错处下划线
+    severity_sort = true,    -- 按严重程度排序
+    float = { source = 'if_many' }, -- 浮窗显示来源（多项时）
+  })
+end)
 
 -- 搜索 ---------------------------------------------------------------
 opt.incsearch = true
